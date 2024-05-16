@@ -1,5 +1,5 @@
 import feedparser
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import mktime
 import urllib.request as request
 import json
@@ -31,30 +31,33 @@ def actualize(rss):
     data = rss['entries']
     sorted_data = sorted(data, key=lambda x: x['published_parsed'])
     last = sorted_data[-1]
-
+    dt = datetime.strptime(last['published'], '%a, %d %b %Y %H:%M:%S %z')
+    dateT=str(datetime.fromtimestamp(dt.timestamp()) - timedelta(hours=2))
+    img = last['media_content'][0]['url']
     try:
         with open(last_seen_path, "r") as f:
             res = f.read().split(";")
             date = res[0]
             tit = res[1]
-            if (date == str(last['published_parsed']) or tit ==
+            if (date == str(dateT) or tit ==
                 str(last['title'])):
                 return
             else:
                 with open(last_seen_path, "w") as f:
-                    f.write(str(last['published_parsed'])+";"+str(last['title']))
+                    f.write(str(dateT)+";"+str(last['title']))
     except FileNotFoundError as e:
         with open(last_seen_path, "w") as f:
-            f.write(str(last['published_parsed'])+";"+str(last['title']))
+            f.write(str(dateT)+";"+str(last['title']))
 
     payload=dict()
     embed=dict()
 
     embed['title']=last['title']
     embed['description']=last['summary']
-    embed['timestamp']=str(pytz.timezone("Europe/Paris").localize(datetime.fromtimestamp(mktime(last['published_parsed'])),is_dst=None))
+    embed['timestamp']=dateT
     embed['authors']=last['credit']
     embed['url']=last['link']
+    embed['image']={"url":img}
     payload['embeds']=[embed]
 
 
