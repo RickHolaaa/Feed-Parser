@@ -74,8 +74,6 @@ def sendWebhook(payload):
     except TabError as e:
         print(f"Error {e.reason}")
 
-#cleanRSS(parseRSS('https://www.lefigaro.fr/rss/figaro_actualites.xml'))
-
 if __name__ == '__main__':
     while (True):
         sendWebhook(actualize(parseRSS(RSS_URL)))
