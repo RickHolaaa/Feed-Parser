@@ -32,7 +32,7 @@ def actualize(rss):
     sorted_data = sorted(data, key=lambda x: x['published_parsed'])
     last = sorted_data[-1]
     dt = datetime.strptime(last['published'], '%a, %d %b %Y %H:%M:%S %z')
-    dateT=str(datetime.fromtimestamp(dt.timestamp()) - timedelta(hours=2))
+    dateT=str(datetime.fromtimestamp(dt.timestamp()))
     img = last['media_content'][0]['url']
     try:
         with open(last_seen_path, "r") as f:
