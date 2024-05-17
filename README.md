@@ -14,7 +14,11 @@ Libraries :
   - WEBHOOK_URL="your_webhook_url"
   - RSS_URL="your_rss_url"
 2. Change the variables' name
-  
+3. Add a new task on crontab
+
+crontab -e
+* * * * * /usr/bin/python3 /path/to/feed.py 2> /path/to/feed.log
+
 It will automatically change the feed.
 
 # Example
